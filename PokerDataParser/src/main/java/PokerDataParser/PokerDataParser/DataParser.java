@@ -24,10 +24,10 @@ public class DataParser {
 		String line;
 		br.readLine();
 		int i=0;
-		while ((line = br.readLine()) != null&&i<2) {
+		while ((line = br.readLine()) != null&&i<1) {
 			String str =line.split(",", 3)[2];
 			String json=str.substring(2, str.length()-5);
-			this.jsonParser(json.replaceAll("\"\"","\""));
+			this.jsonParser(json.replaceAll("\"\"","\""),id);
 			i++;
 			
 		}
@@ -41,16 +41,23 @@ public class DataParser {
 	return id;
 	
 }
-	private  void jsonParser(String json){
+	private  void jsonParser(String json ,String id){
 		JsonReader reader = Json.createReader(new StringReader(json));
 		JsonObject matchObject = reader.readObject();
 		JsonArray eventsArray = matchObject.getJsonArray("events");
+		PlayerState ps=new PlayerState();
+		ps.setPlayerId(id);
 		for(JsonValue v : eventsArray){
-			System.out.println(v.toString());
 			JsonObject o=(JsonObject) v;
-			//System.out.println(o.getJsonString("subclassType"));
+			//serve per prendere una posizione dell'array System.out.println(eventsArray.getJsonObject(1).toString());
+			//if(id!=o.getJsonString(""))
+			System.out.println(v.toString());
+			//questo if lo fai anche per Raise Fold Bet e .....in questo modo conteggi per la % poi fai un altro if che racchiude id== e li invii al writer e resetti %
+			if(o.getString("subclassType").equals("ExternalCallEvent")&&!"6550:0000017758".equals(o.getJsonObject("externalCallEvent").getString("playerId"))){
+			System.out.println(o.getJsonObject("externalCallEvent").getString("playerId"));
+			ps.upContCall();
+			}
 			
 		}
-		
 	}
 }
