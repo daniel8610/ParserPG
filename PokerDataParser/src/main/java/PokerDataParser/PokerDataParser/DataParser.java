@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.LinkedList;
 
 import javax.json.Json;
 import javax.json.JsonArray;
@@ -14,8 +15,16 @@ import javax.json.JsonValue;
 
 
 public class DataParser {
-	public DataParser(){
-		
+	private LinkedList<String> eventi;
+	private StateWriter writer;
+	public DataParser(String path){
+		this.writer=new StateWriter(path);
+		this.eventi=new LinkedList<String>();
+		eventi.add("ExternalRaiseEvent");
+		eventi.add("ExternalCallEvent");
+		eventi.add("ExternalFoldEvent");
+		eventi.add("ExternalBetEvent");
+		eventi.add("ExternalCheckEvent");
 	}
 	public  String parse(String id,String path){
 	BufferedReader br;
@@ -47,16 +56,40 @@ public class DataParser {
 		JsonArray eventsArray = matchObject.getJsonArray("events");
 		PlayerState ps=new PlayerState();
 		ps.setPlayerId(id);
+		//metti contatore nel for cambialo con eventsArray.getJsonObject(1) (var trovato)
 		for(JsonValue v : eventsArray){
 			JsonObject o=(JsonObject) v;
-			//serve per prendere una posizione dell'array System.out.println(eventsArray.getJsonObject(1).toString());
 			//if(id!=o.getJsonString(""))
 			System.out.println(v.toString());
-			//questo if lo fai anche per Raise Fold Bet e .....in questo modo conteggi per la % poi fai un altro if che racchiude id== e li invii al writer e resetti %
-			if(o.getString("subclassType").equals("ExternalCallEvent")&&!"6550:0000017758".equals(o.getJsonObject("externalCallEvent").getString("playerId"))){
+			if(o.getString("subclassType").equals("ExternalCardsDealtToPlayersEvent")){
+				JsonArray cards=o.getJsonObject("externalCardsDealtToPlayersEvent").getJsonArray("dealtCards");
+				for(int i=0;i<cards.size();i++){
+					if(cards.getJsonObject(i).getString("playerId").equals(ps.getPlayerId())){
+						System.out.println(cards.getJsonObject(i).getJsonArray("cards").getJsonObject(1).getJsonObject("card").getInt("value"));
+					}
+				}
+			}
+			//Unificare i 3 casi ID!= e aggiungi Bet e Check
+			if(o.getString("subclassType").equals("ExternalCallEvent")&&!ps.getPlayerId().equals(o.getJsonObject("externalCallEvent").getString("playerId"))){
 			System.out.println(o.getJsonObject("externalCallEvent").getString("playerId"));
 			ps.upContCall();
 			}
+			if(o.getString("subclassType").equals("ExternalFoldEvent")&&!ps.getPlayerId().equals(o.getJsonObject("externalFoldEvent").getString("playerId"))){
+				System.out.println(o.getJsonObject("externalFoldEvent").getString("playerId"));
+				ps.upContFold(); 
+				}
+			if(o.getString("subclassType").equals("ExternalRaiseEvent")&&!ps.getPlayerId().equals(o.getJsonObject("externalRaiseEvent").getString("playerId"))){
+				System.out.println(o.getJsonObject("externalRaiseEvent").getString("playerId"));
+				ps.upContRaise();
+				}
+			//Caso giocatore da analizzare
+			if(this.eventi.contains(o.getString("subclassType"))&&ps.getPlayerId().equals(o.getJsonObject(o.getString("subclassType").replaceFirst("E", "e")).getString("playerId"))){
+				System.out.println("contatori del player id:"+ps.getPlayerId()+"  "+ps.getContCall()+" "+ps.getContFold()+" "+ps.getContRaise()+" "+ps.percCall());
+				ps.reset();
+				//fai reset e genera output della scelta e mandalo sul writer 
+				}
+			//resetta contatori dopo che si passa in un altra fase di gioco basta fare un if con externalMoveToPotEvent e reset
+			
 			
 		}
 	}

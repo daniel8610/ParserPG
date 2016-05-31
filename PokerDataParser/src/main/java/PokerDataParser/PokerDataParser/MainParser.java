@@ -1,14 +1,11 @@
 package PokerDataParser.PokerDataParser;
 
-import java.io.StringReader;
 
-import javax.json.Json;
-import javax.json.JsonReader;
 
 public class MainParser {
 	public static void main(String args[]){
-		DataParser p=new DataParser();
-		p.parse("id","dbexport.csv");
+		DataParser p=new DataParser("cartella dove scrivere");
+		p.parse("6550:0000017758","dbexport.csv");
 		
 	}
 

@@ -35,8 +35,25 @@ public class PlayerState {
 		this.cCards=new LinkedList<Integer>();
 		this.pCards=new LinkedList<Integer>();
 	}
+	public double percCall(){
+		double tot=this.contCall+this.contFold+this.contRaise;
+		if(tot==0)
+			return 0;
+		return (this.contCall*100)/tot;
+	}
+	public void reset(){
+		this.contCall=0;
+		this.contFold=0;
+		this.contRaise=0;
+	}
 	public void upContCall(){
 		this.contCall++;
+	}
+	public void upContFold(){
+		this.contFold++;
+	}
+	public void upContRaise(){
+		this.contRaise++;
 	}
     public void addcCard(int cCard){
     	this.cCards.add(cCard);
@@ -44,7 +61,7 @@ public class PlayerState {
     public void addpCard(int pCard){
     	this.pCards.add(pCard);
     }
-	public double getPercFold() {
+	public double getContFold() {
 		return contFold;
 	}
 
@@ -52,7 +69,7 @@ public class PlayerState {
 		this.contFold = percFold;
 	}
 
-	public double getPercCall() {
+	public double getContCall() {
 		return contCall;
 	}
 
@@ -60,7 +77,7 @@ public class PlayerState {
 		this.contCall = percCall;
 	}
 
-	public double getPercRaise() {
+	public double getContRaise() {
 		return contRaise;
 	}
 
