@@ -7,9 +7,9 @@ public class PlayerState {
 
 
 
-	private double contFold;
-	private double contCall;
-	private double contRaise;
+	private double countFold;
+	private double countCall;
+	private double countRaise;
 	private double position;
 	private LinkedList<Integer> pCards;
 	private LinkedList<Integer> cCards;
@@ -18,9 +18,9 @@ public class PlayerState {
 	
 	public PlayerState(double percFold, double percCall, double percRaise,
 			double position, LinkedList<Integer> pCards, LinkedList<Integer> cCards, String playerId,String output) {
-		this.contFold = percFold;
-		this.contCall = percCall;
-		this.contRaise = percRaise;
+		this.countFold = percFold;
+		this.countCall = percCall;
+		this.countRaise = percRaise;
 		this.position = position;
 		this.pCards = pCards;
 		this.cCards = cCards;
@@ -29,31 +29,31 @@ public class PlayerState {
 	}
 	
 	public PlayerState(){
-		this.contCall=0;
-		this.contFold=0;
-		this.contRaise=0;
+		this.countCall=0;
+		this.countFold=0;
+		this.countRaise=0;
 		this.cCards=new LinkedList<Integer>();
 		this.pCards=new LinkedList<Integer>();
 	}
 	public double percCall(){
-		double tot=this.contCall+this.contFold+this.contRaise;
+		double tot=this.countCall+this.countFold+this.countRaise;
 		if(tot==0)
 			return 0;
-		return (this.contCall*100)/tot;
+		return (this.countCall*100)/tot;
 	}
 	public void reset(){
-		this.contCall=0;
-		this.contFold=0;
-		this.contRaise=0;
+		this.countCall=0;
+		this.countFold=0;
+		this.countRaise=0;
 	}
 	public void upContCall(){
-		this.contCall++;
+		this.countCall++;
 	}
 	public void upContFold(){
-		this.contFold++;
+		this.countFold++;
 	}
 	public void upContRaise(){
-		this.contRaise++;
+		this.countRaise++;
 	}
     public void addcCard(int cCard){
     	this.cCards.add(cCard);
@@ -62,27 +62,27 @@ public class PlayerState {
     	this.pCards.add(pCard);
     }
 	public double getContFold() {
-		return contFold;
+		return countFold;
 	}
 
 	public void setPercFold(double percFold) {
-		this.contFold = percFold;
+		this.countFold = percFold;
 	}
 
 	public double getContCall() {
-		return contCall;
+		return countCall;
 	}
 
 	public void setPercCall(double percCall) {
-		this.contCall = percCall;
+		this.countCall = percCall;
 	}
 
 	public double getContRaise() {
-		return contRaise;
+		return countRaise;
 	}
 
 	public void setPercRaise(double percRaise) {
-		this.contRaise = percRaise;
+		this.countRaise = percRaise;
 	}
 
 	public double getPosition() {

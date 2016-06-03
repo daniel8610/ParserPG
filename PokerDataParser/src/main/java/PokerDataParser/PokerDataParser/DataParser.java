@@ -13,7 +13,8 @@ import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.json.JsonValue;
 
-
+//idea crea un reader che si lavora le string come in riga 36-40 poi sposta il codice metodo priv in publico e 
+//crea un metodo privato per estrarti solo le carte publiche e uno per le carte private
 public class DataParser {
 	private LinkedList<String> eventi;
 	private StateWriter writer;
@@ -56,7 +57,6 @@ public class DataParser {
 		JsonArray eventsArray = matchObject.getJsonArray("events");
 		PlayerState ps=new PlayerState();
 		ps.setPlayerId(id);
-		//metti contatore nel for cambialo con eventsArray.getJsonObject(1) (var trovato)
 		for(JsonValue v : eventsArray){
 			JsonObject o=(JsonObject) v;
 			//if(id!=o.getJsonString(""))
@@ -65,7 +65,9 @@ public class DataParser {
 				JsonArray cards=o.getJsonObject("externalCardsDealtToPlayersEvent").getJsonArray("dealtCards");
 				for(int i=0;i<cards.size();i++){
 					if(cards.getJsonObject(i).getString("playerId").equals(ps.getPlayerId())){
-						System.out.println(cards.getJsonObject(i).getJsonArray("cards").getJsonObject(1).getJsonObject("card").getInt("value"));
+						ps.addpCard(cards.getJsonObject(i).getJsonArray("cards").getJsonObject(0).getJsonObject("card").getInt("value"));
+						ps.addpCard(cards.getJsonObject(i).getJsonArray("cards").getJsonObject(1).getJsonObject("card").getInt("value"));
+						System.out.println(ps.getpCards().get(0)+"   "+ps.getpCards().get(1));
 					}
 				}
 			}
