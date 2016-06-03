@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 import javax.json.Json;
@@ -12,7 +13,14 @@ import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.json.JsonValue;
-
+/*
+ HashMap<String, String> map = new HashMap();
+	map.put("ExternalRaiseEvent","raise");
+	map.put("ExternalCallEvent","call");
+	map.put("ExternalFoldEvent","fold");
+	map.put("ExternalBetEvent","raise");
+	map.put("ExternalCheckEvent","call"); 
+ */
 //idea crea un reader che si lavora le string come in riga 36-40 poi sposta il codice metodo priv in publico e 
 //crea un metodo privato per estrarti solo le carte publiche e uno per le carte private
 public class DataParser {
@@ -86,6 +94,7 @@ public class DataParser {
 				}
 			//Caso giocatore da analizzare
 			if(this.eventi.contains(o.getString("subclassType"))&&ps.getPlayerId().equals(o.getJsonObject(o.getString("subclassType").replaceFirst("E", "e")).getString("playerId"))){
+				ps.setOutput(o.getString("subclassType"));
 				System.out.println("contatori del player id:"+ps.getPlayerId()+"  "+ps.getContCall()+" "+ps.getContFold()+" "+ps.getContRaise()+" "+ps.percCall());
 				ps.reset();
 				//fai reset e genera output della scelta e mandalo sul writer 
