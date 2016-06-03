@@ -22,7 +22,12 @@ public StateWriter(String path){
 public void write(PlayerState ps){
 	
 	try {
-		//qui fai scrivere la linea separata da ","
+		this.bw.write(ps.getPlayerId()+","+ps.getPosition()+","+(float)(ps.getCountCall()*100/ps.getTotBet())+","+(float)(ps.getCountRaise()*100/ps.getTotBet())+","+(float)(ps.getCountFold()*100/ps.getTotBet())
+				+","+ps.getpCards().get(0)+","+ps.getpCards().get(1)+",");
+		for(int v:ps.getcCards()){
+			this.bw.write(v+",");
+		}
+		this.bw.write(ps.getOutput());
 		this.bw.newLine();
 		
 	} catch (IOException e) {

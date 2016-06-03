@@ -16,18 +16,6 @@ public class PlayerState {
 	private String output;
 	private String playerId;
 	
-	public PlayerState(double percFold, double percCall, double percRaise,
-			double position, LinkedList<Integer> pCards, LinkedList<Integer> cCards, String playerId,String output) {
-		this.countFold = percFold;
-		this.countCall = percCall;
-		this.countRaise = percRaise;
-		this.position = position;
-		this.pCards = pCards;
-		this.cCards = cCards;
-		this.output = output;
-		this.playerId=playerId;
-	}
-	
 	public PlayerState(){
 		this.countCall=0;
 		this.countFold=0;
@@ -41,18 +29,29 @@ public class PlayerState {
 			return 0;
 		return (this.countCall*100)/tot;
 	}
+	public double getTotBet(){
+		return this.countCall+this.countFold+this.countRaise;
+	}
 	public void reset(){
 		this.countCall=0;
 		this.countFold=0;
 		this.countRaise=0;
 	}
-	public void upContCall(){
+	public void upCount(String s){
+		if(s.equals("call"))
+			this.upCountCall();
+		if(s.equals("fold"))
+			this.upCountFold();
+		if(s.equals("raise"))
+			this.upCountRaise();
+	}
+	public void upCountCall(){
 		this.countCall++;
 	}
-	public void upContFold(){
+	public void upCountFold(){
 		this.countFold++;
 	}
-	public void upContRaise(){
+	public void upCountRaise(){
 		this.countRaise++;
 	}
     public void addcCard(int cCard){
@@ -61,7 +60,7 @@ public class PlayerState {
     public void addpCard(int pCard){
     	this.pCards.add(pCard);
     }
-	public double getContFold() {
+	public double getCountFold() {
 		return countFold;
 	}
 
@@ -69,7 +68,7 @@ public class PlayerState {
 		this.countFold = percFold;
 	}
 
-	public double getContCall() {
+	public double getCountCall() {
 		return countCall;
 	}
 
@@ -77,7 +76,7 @@ public class PlayerState {
 		this.countCall = percCall;
 	}
 
-	public double getContRaise() {
+	public double getCountRaise() {
 		return countRaise;
 	}
 
@@ -124,7 +123,11 @@ public class PlayerState {
 	public void setPlayerId(String playerId) {
 		this.playerId = playerId;
 	}
-	
+	public String toString(){
+		String s= this.getPlayerId()+","+this.getCountCall()*100/this.getTotBet()+","+this.getCountRaise()*100/this.getTotBet()+","+this.getCountFold()*100/this.getTotBet()
+				+","+this.getpCards().get(0)+","+this.getpCards().get(1)+","+this.output;
+		return s;
+	}
 	
 
 }
