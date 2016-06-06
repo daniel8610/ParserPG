@@ -7,10 +7,10 @@ public class PlayerState {
 
 
 
-	private double countFold;
-	private double countCall;
-	private double countRaise;
-	private double position;
+	private float countFold;
+	private float countCall;
+	private float countRaise;
+	private float position;
 	private LinkedList<Integer> pCards;
 	private LinkedList<Integer> cCards;
 	private String output;
@@ -29,13 +29,29 @@ public class PlayerState {
 			return 0;
 		return (this.countCall*100)/tot;
 	}
-	public double getTotBet(){
+	public float getTotBet(){
 		return this.countCall+this.countFold+this.countRaise;
 	}
 	public void reset(){
 		this.countCall=0;
 		this.countFold=0;
 		this.countRaise=0;
+	}
+	public float[] getPerc(){
+		float[] p={0,0,0};
+		
+		if(this.getTotBet()!=0){
+			p[0]=(this.countCall*100)/this.getTotBet();
+			p[1]=(this.countRaise*100)/this.getTotBet();
+			p[2]=(this.countFold*100)/this.getTotBet();
+			
+		}
+			
+		
+		
+		
+		
+		return p;
 	}
 	public void upCount(String s){
 		if(s.equals("call"))
@@ -60,35 +76,36 @@ public class PlayerState {
     public void addpCard(int pCard){
     	this.pCards.add(pCard);
     }
-	public double getCountFold() {
+	public float getCountFold() {
 		return countFold;
 	}
 
-	public void setPercFold(double percFold) {
-		this.countFold = percFold;
+	public void setCountFold(float countFold) {
+		this.countFold = countFold;
 	}
 
-	public double getCountCall() {
+	public float getCountCall() {
 		return countCall;
 	}
 
-	public void setPercCall(double percCall) {
-		this.countCall = percCall;
+	public void setCountCall(float countcCall) {
+		this.countCall = countcCall;
 	}
 
-	public double getCountRaise() {
+	public float getCountRaise() {
 		return countRaise;
 	}
 
-	public void setPercRaise(double percRaise) {
-		this.countRaise = percRaise;
+	public void setCountRaise(float countRaise) {
+		this.countRaise = countRaise;
+		
 	}
 
-	public double getPosition() {
+	public float getPosition() {
 		return position;
 	}
 
-	public void setPosition(double position) {
+	public void setPosition(float position) {
 		this.position = position;
 	}
 
@@ -123,11 +140,7 @@ public class PlayerState {
 	public void setPlayerId(String playerId) {
 		this.playerId = playerId;
 	}
-	public String toString(){
-		String s= this.getPlayerId()+","+this.getCountCall()*100/this.getTotBet()+","+this.getCountRaise()*100/this.getTotBet()+","+this.getCountFold()*100/this.getTotBet()
-				+","+this.getpCards().get(0)+","+this.getpCards().get(1)+","+this.output;
-		return s;
-	}
+	
 	
 
 }

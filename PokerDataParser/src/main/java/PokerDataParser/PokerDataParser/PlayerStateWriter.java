@@ -6,9 +6,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 
-public class StateWriter {
+public class PlayerStateWriter {
 	private BufferedWriter bw;
-public StateWriter(String path){
+public PlayerStateWriter(String path){
 	File fout = new File(path);
 	FileOutputStream fos;
 	try {
@@ -22,8 +22,12 @@ public StateWriter(String path){
 public void write(PlayerState ps){
 	
 	try {
-		this.bw.write(ps.getPlayerId()+","+ps.getPosition()+","+(float)(ps.getCountCall()*100/ps.getTotBet())+","+(float)(ps.getCountRaise()*100/ps.getTotBet())+","+(float)(ps.getCountFold()*100/ps.getTotBet())
-				+","+ps.getpCards().get(0)+","+ps.getpCards().get(1)+",");
+		String t="";
+		for(float p:ps.getPerc()){
+			t=t+Float.toString(p)+",";
+		}
+		this.bw.write(ps.getPlayerId()+","+ps.getPosition()+","+t
+				+ps.getpCards().get(0)+","+ps.getpCards().get(1)+",");
 		for(int v:ps.getcCards()){
 			this.bw.write(v+",");
 		}

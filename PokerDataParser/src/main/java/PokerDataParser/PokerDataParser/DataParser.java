@@ -19,9 +19,9 @@ import javax.json.JsonValue;
 //crea un metodo privato per estrarti solo le carte publiche e uno per le carte private
 public class DataParser {
 	private HashMap<String, String> eventsMap;
-	private StateWriter writer;
+	private PlayerStateWriter writer;
 	public DataParser(String path){
-		this.writer=new StateWriter(path);
+		this.writer=new PlayerStateWriter(path);
 		this.eventsMap=new HashMap<String,String>();
 		this.eventsMap.put("ExternalRaiseEvent","raise");
 		this.eventsMap.put("ExternalCallEvent","call");
@@ -70,7 +70,7 @@ public class DataParser {
 					ps.setPlayerId(cards.getJsonObject(new Random().nextInt(cards.size()-1)).getString("playerId"));
 				for(int i=0;i<cards.size();i++){
 					if(cards.getJsonObject(i).getString("playerId").equals(ps.getPlayerId())){
-						ps.setPosition((double)(i+1)/cards.size());
+						ps.setPosition((float)(i+1)/cards.size());
 						ps.addpCard(cards.getJsonObject(i).getJsonArray("cards").getJsonObject(0).getJsonObject("card").getInt("value"));
 						ps.addpCard(cards.getJsonObject(i).getJsonArray("cards").getJsonObject(1).getJsonObject("card").getInt("value"));
 						System.out.println(ps.getpCards().get(0)+"   "+ps.getpCards().get(1));
@@ -86,7 +86,6 @@ public class DataParser {
 				System.out.println("contatori del player id:"+ps.getOutput()+"  "+ps.getPosition()+"  "+ps.getPlayerId()+"  "+ps.getCountCall()+" "+ps.getCountFold()+" "+ps.getCountRaise()+" "+ps.percCall());
 				this.writer.write(ps);
 				ps.reset();
-				//fai reset e genera output della scelta e mandalo sul writer 
 				}
 			if(o.getString("subclassType").equals("ExternalCardsDealtToTableEvent")&&o.getJsonObject("externalCardsDealtToTableEvent").containsKey("communityCards")){
 				for(JsonValue k:o.getJsonObject("externalCardsDealtToTableEvent").getJsonArray("communityCards")){
